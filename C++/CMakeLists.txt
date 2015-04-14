@@ -22,5 +22,6 @@ add_subdirectory(AssetGenerics)
 add_subdirectory(Assets)
 add_subdirectory(Wavefront)
 add_subdirectory(QImageLoader)
-
 add_subdirectory(Samples)
+
+add_subdirectory(application)
