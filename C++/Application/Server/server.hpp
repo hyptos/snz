@@ -5,14 +5,14 @@
 #include "TcpNetworking/simpletcpstartpoint.hpp"
 #include <vector>
 
+typedef void (DisconnectedCallback) ( QUuid client );
+
+typedef struct  _clientData ClientData;
+
 class SNZ_Server {
 
 public:
     SNZ_Server();
-
-    SNZ_Server(const SNZ_Server&) {
-      std::cout << "kikoo \n";
-    };
 
     ~SNZ_Server();
 
@@ -22,9 +22,11 @@ public:
 
     void stopServer();
 
-private :
+    SimpleTcpStartPoint *getSocketServer();
 
-    bool running;
+    static void OnDisconnect ( QUuid client );
+
+private :
 
     SimpleTcpStartPoint *socketServer;
 
@@ -32,9 +34,26 @@ private :
 
     friend void serveur_listening_routine(SNZ_Server *server);
 
+protected :
+
+    bool running;
+
+    static QMap<QUuid, ClientData*> clients;
+
 };
 
-void serveur_listening_routine(SNZ_Server *server);
+typedef struct  _clientData {
+    QUuid uuid;
+    //SimpleTcpStartPoint* server;
+    SNZ_Server *server;
+    FiFoBuffering recv_buffering, send_buffering;
+    std::thread *recv_thread, *send_thread;
+    bool closeMe;
+} ClientData;
 
+
+void serveur_listening_routine(SNZ_Server *server);
+void client_thread_send (ClientData *data);
+void client_thread_receive (ClientData *data);
 
 #endif // SERVER_HPP
