@@ -63,3 +63,8 @@ bool SimpleTcpEndPoint::receive ( ByteBuffer& buffer )
     }
     return true;
 }
+
+bool SimpleTcpEndPoint::dataAvailable()
+{
+    return mSocket->dataAvailable();
+}
