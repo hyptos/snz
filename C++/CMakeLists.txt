@@ -4,7 +4,7 @@ set(CMAKE_OSX_ARCHITECTURES "x86_64")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -g")
 
 project ( Mif39 CXX )
-list ( APPEND CMAKE_PREFIX_PATH  "/Locals/Applications/Qt5.4.1/5.4/clang_64/lib/cmake")
+list ( APPEND CMAKE_PREFIX_PATH  "/home/avzgui/Qt/5.4/gcc_64/lib/cmake")
 find_package(Qt5Core)
 find_package(Qt5Gui)
 
