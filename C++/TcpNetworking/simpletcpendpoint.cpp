@@ -63,4 +63,3 @@ bool SimpleTcpEndPoint::receive ( ByteBuffer& buffer )
     }
     return true;
 }
-
