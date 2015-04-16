@@ -2,17 +2,19 @@
 #define SERVER_HPP
 
 #include <thread>
+#include <pthread.h>
 #include "TcpNetworking/simpletcpstartpoint.hpp"
+#include "Message/messageHandler.hpp"
 #include <vector>
+
+
+typedef struct  _clientData ClientData;
 
 class SNZ_Server {
 
 public:
-    SNZ_Server();
 
-    SNZ_Server(const SNZ_Server&) {
-      std::cout << "kikoo \n";
-    };
+    SNZ_Server();
 
     ~SNZ_Server();
 
@@ -22,19 +24,40 @@ public:
 
     void stopServer();
 
-private :
+    SimpleTcpStartPoint *getSocketServer();
 
-    bool running;
+    static void OnDisconnect ( QUuid client );
+
+    void onReceiveMessage(QUuid client) const;
+
+private :
 
     SimpleTcpStartPoint *socketServer;
 
     void acceptClient(QUuid client);
 
-    friend void serveur_listening_routine(SNZ_Server *server);
+    friend void *serveur_listening_routine(void *data);
+
+protected :
+
+    bool running;
+
+    static QMap<QUuid, ClientData*> clients;
 
 };
 
-void serveur_listening_routine(SNZ_Server *server);
+typedef struct  _clientData {
+    QUuid uuid;
+    //SimpleTcpStartPoint* server;
+    SNZ_Server *server;
+    FiFoBuffering recv_buffering, send_buffering;
+    pthread_t recv_thread, send_thread;
+    bool closeMe;
+} ClientData;
 
+
+void *serveur_listening_routine(void *data);
+void *client_thread_send (void *data);
+void *client_thread_receive (void *data);
 
 #endif // SERVER_HPP
