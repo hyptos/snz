@@ -2,16 +2,18 @@
 #define SERVER_HPP
 
 #include <thread>
+#include <pthread.h>
 #include "TcpNetworking/simpletcpstartpoint.hpp"
+#include "Message/messageHandler.hpp"
 #include <vector>
 
-typedef void (DisconnectedCallback) ( QUuid client );
 
 typedef struct  _clientData ClientData;
 
 class SNZ_Server {
 
 public:
+
     SNZ_Server();
 
     ~SNZ_Server();
@@ -26,11 +28,14 @@ public:
 
     static void OnDisconnect ( QUuid client );
 
+    void onReceiveMessage(QUuid client) const;
+
 private :
 
     SimpleTcpStartPoint *socketServer;
 
     void acceptClient(QUuid client);
+
 
     friend void serveur_listening_routine(SNZ_Server *server);
 
@@ -47,13 +52,13 @@ typedef struct  _clientData {
     //SimpleTcpStartPoint* server;
     SNZ_Server *server;
     FiFoBuffering recv_buffering, send_buffering;
-    std::thread *recv_thread, *send_thread;
+    pthread_t recv_thread, send_thread;
     bool closeMe;
 } ClientData;
 
 
 void serveur_listening_routine(SNZ_Server *server);
-void client_thread_send (ClientData *data);
-void client_thread_receive (ClientData *data);
+void *client_thread_send (void *data);
+void *client_thread_receive (void *data);
 
 #endif // SERVER_HPP
