@@ -4,13 +4,14 @@
 #include <thread>
 #include <pthread.h>
 #include "TcpNetworking/simpletcpstartpoint.hpp"
-#include "Message/messageHandler.hpp"
+#include "Message/protocolemanager.h"
+#include "Message/message.hpp"
 #include <vector>
 
 
 typedef struct  _clientData ClientData;
 
-class SNZ_Server {
+class SNZ_Server : virtual protocoleManager {
 
 public:
 
@@ -30,11 +31,17 @@ public:
 
     void onReceiveMessage(QUuid client) const;
 
+    IMessage *getMessage(ByteBuffer &buffer) const;
+
+    void setMessageDispatcher(IMessageDispatcher *dispt);
+
 private :
 
-    SimpleTcpStartPoint *socketServer;
+    SimpleTcpStartPoint *mSocketServer;
 
     void acceptClient(QUuid client);
+
+    IMessageDispatcher *mMessageDispatcher;
 
     friend void *serveur_listening_routine(void *data);
 
@@ -42,7 +49,7 @@ protected :
 
     bool running;
 
-    static QMap<QUuid, ClientData*> clients;
+    static QMap<QUuid, ClientData*> mClients;
 
 };
 
