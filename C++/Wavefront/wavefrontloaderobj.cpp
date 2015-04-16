@@ -73,7 +73,7 @@ SharedResourceList WavefrontLoaderOBJ::__load ( FileDescriptor filename ) {
             else
                 fname = theFile.mDescriptor.fileSubDirectory + "/" + subname;
             FileDescriptor file ( fname, theFile.mDescriptor.fileDirectory );
-            SharedResourceList matAssets = ResourceHolder::Load(file); //ISharedResourceManager::LoadLibrary(file);
+            SharedResourceList matAssets = ResourceHolder::Load(file);
             if ( matAssets.size() > 0 ) {
                 materialLib = matAssets;
             }
@@ -89,7 +89,7 @@ SharedResourceList WavefrontLoaderOBJ::__load ( FileDescriptor filename ) {
             QString subname = line.right ( line.length() - pos );
             Assets::MaterialPtr mat;
             foreach ( SharedResourcePtr tmp, materialLib )
-                if ( tmp->getName() == subname ) mat = tmp.dynamicCast < Assets::Material > ();
+                if ( tmp->get < QString > ( "_RealName" ) == subname ) mat = tmp.dynamicCast < Assets::Material > ();
             currentMaterial = new Assets::MaterialGroup ( currentObject, mat, oGrpTri, nbgf [ iGrp ] );
         }
         else if ( m_tokens [ 0 ] == "o" ) {
@@ -101,7 +101,7 @@ SharedResourceList WavefrontLoaderOBJ::__load ( FileDescriptor filename ) {
             QString line = theFile.getLine();
             int pos = line.indexOf ( m_tokens [ 1 ] );
             QString name = line.right ( line.length() - pos );
-            currentObject = ResourceHolder::CreateByName ( "Mesh", name ).dynamicCast < Assets::Mesh > ();//Assets::MeshPtr ( new Assets::Mesh ( name ) );
+            currentObject = ResourceHolder::CreateByName ( "Mesh", name ).dynamicCast < Assets::Mesh > ();
             currentMaterial = NULL;
         }
         else if ( m_tokens [ 0 ] == "v" ) {
@@ -140,8 +140,9 @@ SharedResourceList WavefrontLoaderOBJ::__load ( FileDescriptor filename ) {
                 tid [ i ] = nid [ i ] = id [ i ] = -1;
             if ( nbv == 3 ) {
                 Triangle t;
+                t.m_hasNormals = t.m_hasTexcoords = false;
                 if ( mode >= 2 ) t.m_hasTexcoords = true;
-                else if ( mode >= 1 ) t.m_hasNormals = true;
+                if ( mode >= 1 ) t.m_hasNormals = true;
                 for ( int i = 0 ; i < 3 ; i ++ ) {
                     indices = m_tokens [ i + 1 ].split ( "/", QString::SkipEmptyParts );
                     t.m_vertexIndices [ i ] = indices [ 0 ].toUInt () - 1;
@@ -154,8 +155,9 @@ SharedResourceList WavefrontLoaderOBJ::__load ( FileDescriptor filename ) {
                 else { oGrpTri [ iGrpTri ] = t; iGrpTri ++; }
             } else {
                 Triangle t;
+                t.m_hasNormals = t.m_hasTexcoords = false;
                 if ( mode >= 2 ) t.m_hasTexcoords = true;
-                else if ( mode >= 1 ) t.m_hasNormals = true;
+                if ( mode >= 1 ) t.m_hasNormals = true;
                 int idp;
                 idp = 0; indices = m_tokens [ 1 ].split ( "/", QString::SkipEmptyParts );
                 t.m_vertexIndices [ idp ] = indices [ 0 ].toUInt () - 1;

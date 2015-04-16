@@ -19,11 +19,16 @@ int main ( int argc, char** argv ) {
     __attachAssets();*/
     __attachQImage();
     __attachWavefront();
+
     FileDescriptor file ( argv[1]);
     SharedResourceList ress = ResourceHolder::Load(file);
+    std::cout << "** Resource loaded" << std::endl;
     SharedResourcePtr ptr = ress [0];
     ByteBuffer message = ResourceHolder::ToBuffer(ptr);
+    std::cout << "** Resource converted" << std::endl;
 
+    //unsigned char* test = "machaine";
+    //ByteBuffer stringtest = new ByteBuffer(test, 8);
     SimpleTcpEndPoint::Options options;
     options.serverIP = "localhost";
     options.connectionPort = 3000;

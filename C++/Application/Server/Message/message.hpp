@@ -7,8 +7,8 @@ class IMessage
 {
 public:
     IMessage();
-    IMessage(int var_code);
-    IMessage(int var_code, void* mData);
+    IMessage(char var_code);
+    IMessage(char var_code, void* mData);
     ~IMessage();
 
     template<typename T> T *getGeneriqueData() {
@@ -16,7 +16,7 @@ public:
     }
 
     void* mData;
-    int code;
+    char code;
 };
 
 template<typename T>
@@ -26,7 +26,7 @@ public:
 
     }
 
-    Message(int code ,T* data) : IMessage(code, data ) {}
+    Message(char code ,T* data) : IMessage(code, data ) {}
 
     T* getData() {
         return getGeneriqueData<T>;

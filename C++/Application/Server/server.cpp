@@ -38,13 +38,10 @@ bool SNZ_Server::isRunning() const {
 }
 
 void SNZ_Server::onReceiveMessage(QUuid client) const {
-    std::cout << "message recu ! \n" ;
     ByteBuffer* message = NULL;
     mClients [ client ]->recv_buffering.get(message);
     if(this->mMessageDispatcher != NULL) {
         mMessageDispatcher->dispatchMessage(this->getMessage(*message));
-    } else {
-        std::cerr << "no dispatcher ... \n";
     }
     if(message != NULL) {
         delete message;
@@ -63,7 +60,9 @@ void SNZ_Server::acceptClient(QUuid client) {
     ClientData* clt_data  = new ClientData;
     clt_data->uuid        = client;
     clt_data->server      = this;
-    clt_data->closeMe     = true;
+    clt_data->recv_buffering.mGettingReleaseBuffer = true;
+    clt_data->send_buffering.mGettingReleaseBuffer = true;
+    clt_data->closeMe     = false;
     pthread_create ( &(clt_data->recv_thread), NULL, client_thread_receive, clt_data );
     pthread_create ( &(clt_data->send_thread), NULL, client_thread_send, clt_data );
     mClients[ client ]     = clt_data;
@@ -91,7 +90,7 @@ void *client_thread_receive ( void* data)
     ClientData* client = (ClientData*) data;
     SimpleTcpStartPoint *socket_server = client->server->getSocketServer();
     ByteBuffer* message = new ByteBuffer;
-    while ( client->closeMe ) {
+    while ( ! client->closeMe ) {
       if ( socket_server->dataAvailable(client->uuid)) {
             socket_server->receive(client->uuid,*message);
         }
@@ -102,7 +101,6 @@ void *client_thread_receive ( void* data)
         }
         pthread_yield();
     }
-
       std::cout << "fin thread receive ! \n" ;
       return NULL;
 }
@@ -112,7 +110,7 @@ void *client_thread_send ( void* data )
     ClientData* client = (ClientData*) data;
 
     SimpleTcpStartPoint *socket_server = client->server->getSocketServer();
-    while ( client->closeMe ) {
+    while ( ! client->closeMe ) {
        if ( client->send_buffering.available() ) {
             ByteBuffer* message;
             client->send_buffering.get(message);
@@ -127,17 +125,18 @@ void *client_thread_send ( void* data )
 
 void SNZ_Server::OnDisconnect ( QUuid client ) {
     std::cout << "Client " << client.toString().toStdString() << " has been disconnected!!" << std::endl;
-    SNZ_Server::mClients[ client ]->closeMe = false;
+    SNZ_Server::mClients[ client ]->closeMe = true;
+  /*  pthread_join(mClients [ client ]->send_thread, NULL );
     pthread_join(mClients [ client ]->recv_thread, NULL );
-    pthread_join(mClients [ client ]->send_thread, NULL );
-    std::cout<< "fin joined \n";
-    SNZ_Server::mClients.remove( client );
+    if(mClients.contains(client)) {
+        SNZ_Server::mClients.remove( client );
+    } */
 }
 
 
 IMessage *SNZ_Server::getMessage(ByteBuffer &buffer) const {
-    int code;
-    fromBuffer<int>(buffer ,0 , code);
+    char code;
+    fromBuffer<char>(buffer ,0 , code);
     return new Message<ByteBuffer>(code, &buffer);
 }
 
