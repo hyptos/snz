@@ -5,7 +5,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -g")
 
 project ( Mif39 CXX )
 
-list ( APPEND CMAKE_PREFIX_PATH "/opt/Qt/5.4/gcc_64/lib/cmake")
+list ( APPEND CMAKE_PREFIX_PATH "/home/avzgui/Qt/5.4/gcc_64/lib/cmake")
 find_package(Qt5Core)
 find_package(Qt5Gui)
 
