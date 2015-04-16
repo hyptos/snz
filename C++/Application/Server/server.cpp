@@ -36,6 +36,10 @@ bool SNZ_Server::isRunning() const {
   return this->running;
 }
 
+void SNZ_Server::onReceiveMessage(QUuid client) const {
+ // std::cout << "message recu ! \n" ;
+}
+
 void SNZ_Server::stopServer() {
   if(this->isRunning()) {
     this->socketServer->stop();
@@ -45,13 +49,13 @@ void SNZ_Server::stopServer() {
 
 void SNZ_Server::acceptClient(QUuid client) {
     std::cout << "Client " << client.toString().toStdString() << " has connected!!" << std::endl;
-    ClientData* clt_data = new ClientData;
-    clt_data->uuid    = client;
-    clt_data->server  = this;
-    clt_data->closeMe = false;
-    std::thread *send_thread = new std::thread(client_thread_send  , clt_data);
-    std::thread *rec_thread  = new std::thread(client_thread_receive, clt_data);
-    clients[ client ] = clt_data;
+    ClientData* clt_data  = new ClientData;
+    clt_data->uuid        = client;
+    clt_data->server      = this;
+    clt_data->closeMe     = true;
+    pthread_create ( &(clt_data->recv_thread), NULL, client_thread_receive, clt_data );
+    pthread_create ( &(clt_data->send_thread), NULL, client_thread_send, clt_data );
+    clients[ client ]     = clt_data;
 }
 
 SimpleTcpStartPoint* SNZ_Server::getSocketServer() {
@@ -68,38 +72,47 @@ void serveur_listening_routine(SNZ_Server *server) {
   }
 }
 
-void client_thread_receive ( ClientData* client)
+void *client_thread_receive ( void* data)
 {
+    ClientData* client = (ClientData*) data;
     SimpleTcpStartPoint *socket_server = client->server->getSocketServer();
     ByteBuffer* message = new ByteBuffer;
     while ( client->closeMe ) {
-        if ( socket_server->dataAvailable(client->uuid))
+      if ( socket_server->dataAvailable(client->uuid)) {
             socket_server->receive(client->uuid,*message);
+        }
         if ( message->getLength() > 0 ) {
             client->recv_buffering.add(message);
             message = new ByteBuffer;
-           // OnReceive ( client->uuid );
+            client->server->onReceiveMessage( client->uuid );
         }
-    }
+     }
+      std::cout << "fin thread receive ! \n" ;
+      return NULL;
 }
 
-void client_thread_send ( ClientData* client )
+void *client_thread_send ( void* data )
 {
+    ClientData* client = (ClientData*) data;
+
     SimpleTcpStartPoint *socket_server = client->server->getSocketServer();
     while ( client->closeMe ) {
-        if ( client->send_buffering.available() ) {
+       if ( client->send_buffering.available() ) {
             ByteBuffer* message;
             client->send_buffering.get(message);
             socket_server->send ( client->uuid, *message );
             delete message;
         }
     }
+    std::cout << "fin thread send ! \n" ;
+    return NULL;
 }
 
 void SNZ_Server::OnDisconnect ( QUuid client ) {
     std::cout << "Client " << client.toString().toStdString() << " has been disconnected!!" << std::endl;
-    SNZ_Server::clients[ client ]->closeMe = true;
-    SNZ_Server::clients[ client ]->recv_thread->join();
-    SNZ_Server::clients[ client ]->send_thread->join();
+    SNZ_Server::clients[ client ]->closeMe = false;
+    pthread_join(clients [ client ]->recv_thread, NULL );
+    pthread_join(clients [ client ]->send_thread, NULL );
+    std::cout<< "fin joined \n";
     SNZ_Server::clients.remove( client );
 }
