@@ -15,3 +15,5 @@ target_link_libraries(ServeurApplication AssetGenerics)
 target_link_libraries(ServeurApplication Assets)
 target_link_libraries(ServeurApplication Wavefront)
 target_link_libraries(ServeurApplication QImageLoader)
+target_link_libraries(ServeurApplication pthread)
+

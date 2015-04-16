@@ -26,7 +26,7 @@ void OnConnect ( QUuid client ) {
     ClientData* clt = new ClientData;
     clt->uuid = client;
     clt->server = theServer;
-    clt->closeMe = false;
+    clt->closeMe = true;
     pthread_create ( &(clt->recv_thread), NULL, client_thread_receive, clt );
     pthread_create ( &(clt->send_thread), NULL, client_thread_send, clt );
     theClients [ client ] = clt;
@@ -34,7 +34,7 @@ void OnConnect ( QUuid client ) {
 
 void OnDisconnect ( QUuid client ) {
     std::cout << "Client " << client.toString().toStdString() << " has been disconnected!!" << std::endl;
-    theClients [ client ]->closeMe = true;
+    theClients [ client ]->closeMe = false;
     pthread_join(theClients [ client ]->recv_thread, NULL );
     pthread_join(theClients [ client ]->send_thread, NULL );
     theClients.remove( client );

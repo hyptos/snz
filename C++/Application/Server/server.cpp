@@ -28,8 +28,9 @@ void SNZ_Server::start() {
   }
 
   this->running = true;
-  std::thread main_thread(serveur_listening_routine, this);
-  main_thread.detach();
+  pthread_t main_thread;
+  pthread_create ( &(main_thread), NULL, serveur_listening_routine, this);
+  pthread_detach(main_thread);
 }
 
 bool SNZ_Server::isRunning() const {
@@ -37,7 +38,7 @@ bool SNZ_Server::isRunning() const {
 }
 
 void SNZ_Server::onReceiveMessage(QUuid client) const {
- // std::cout << "message recu ! \n" ;
+    std::cout << "message recu ! \n" ;
 }
 
 void SNZ_Server::stopServer() {
@@ -62,14 +63,17 @@ SimpleTcpStartPoint* SNZ_Server::getSocketServer() {
     return this->socketServer;
 }
 
-void serveur_listening_routine(SNZ_Server *server) {
+void *serveur_listening_routine(void* data) {
+  SNZ_Server *server = (SNZ_Server *) data;
   QUuid fake, client;
   while(server->isRunning()) {
     client = server->socketServer->listen();
     if(client != fake) {
       server->acceptClient(client);
     }
+    pthread_yield();
   }
+  return NULL;
 }
 
 void *client_thread_receive ( void* data)
@@ -86,7 +90,9 @@ void *client_thread_receive ( void* data)
             message = new ByteBuffer;
             client->server->onReceiveMessage( client->uuid );
         }
-     }
+        pthread_yield();
+    }
+
       std::cout << "fin thread receive ! \n" ;
       return NULL;
 }
@@ -103,6 +109,7 @@ void *client_thread_send ( void* data )
             socket_server->send ( client->uuid, *message );
             delete message;
         }
+        pthread_yield();
     }
     std::cout << "fin thread send ! \n" ;
     return NULL;
