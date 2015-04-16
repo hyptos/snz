@@ -1,20 +1,20 @@
 #include "server.hpp"
 
-QMap<QUuid , ClientData*> SNZ_Server::clients;
+QMap<QUuid , ClientData*> SNZ_Server::mClients;
 
-SNZ_Server::SNZ_Server() : running(false) {
+SNZ_Server::SNZ_Server() : protocoleManager(), running(false), mMessageDispatcher(NULL) {
   SimpleTcpStartPoint::Options options;
   options.connectionPort = 3000;
   options.cbDisconnect = OnDisconnect;
   options.maximumConnectedClients = 1;
-  socketServer = new SimpleTcpStartPoint( options );
+  mSocketServer = new SimpleTcpStartPoint( options );
 }
 
 SNZ_Server::~SNZ_Server() {
   if(this->isRunning()) {
     this->stopServer();
   }
-  delete(socketServer);
+  delete(mSocketServer);
 }
 
 void SNZ_Server::start() {
@@ -22,7 +22,7 @@ void SNZ_Server::start() {
     std::cerr << "serveur is already running , abort \n";
     return;
   }
-  if(!this->socketServer->start()) {
+  if(!this->mSocketServer->start()) {
     std::cerr << "impossible to start socketserver \n";
     return;
   }
@@ -39,11 +39,21 @@ bool SNZ_Server::isRunning() const {
 
 void SNZ_Server::onReceiveMessage(QUuid client) const {
     std::cout << "message recu ! \n" ;
+    ByteBuffer* message = NULL;
+    mClients [ client ]->recv_buffering.get(message);
+    if(this->mMessageDispatcher != NULL) {
+        mMessageDispatcher->dispatchMessage(this->getMessage(*message));
+    } else {
+        std::cerr << "no dispatcher ... \n";
+    }
+    if(message != NULL) {
+        delete message;
+    }
 }
 
 void SNZ_Server::stopServer() {
   if(this->isRunning()) {
-    this->socketServer->stop();
+    this->mSocketServer->stop();
   }
   this->running = false;
 }
@@ -56,18 +66,18 @@ void SNZ_Server::acceptClient(QUuid client) {
     clt_data->closeMe     = true;
     pthread_create ( &(clt_data->recv_thread), NULL, client_thread_receive, clt_data );
     pthread_create ( &(clt_data->send_thread), NULL, client_thread_send, clt_data );
-    clients[ client ]     = clt_data;
+    mClients[ client ]     = clt_data;
 }
 
 SimpleTcpStartPoint* SNZ_Server::getSocketServer() {
-    return this->socketServer;
+    return this->mSocketServer;
 }
 
 void *serveur_listening_routine(void* data) {
   SNZ_Server *server = (SNZ_Server *) data;
   QUuid fake, client;
   while(server->isRunning()) {
-    client = server->socketServer->listen();
+    client = server->mSocketServer->listen();
     if(client != fake) {
       server->acceptClient(client);
     }
@@ -117,9 +127,21 @@ void *client_thread_send ( void* data )
 
 void SNZ_Server::OnDisconnect ( QUuid client ) {
     std::cout << "Client " << client.toString().toStdString() << " has been disconnected!!" << std::endl;
-    SNZ_Server::clients[ client ]->closeMe = false;
-    pthread_join(clients [ client ]->recv_thread, NULL );
-    pthread_join(clients [ client ]->send_thread, NULL );
+    SNZ_Server::mClients[ client ]->closeMe = false;
+    pthread_join(mClients [ client ]->recv_thread, NULL );
+    pthread_join(mClients [ client ]->send_thread, NULL );
     std::cout<< "fin joined \n";
-    SNZ_Server::clients.remove( client );
+    SNZ_Server::mClients.remove( client );
 }
+
+
+IMessage *SNZ_Server::getMessage(ByteBuffer &buffer) const {
+    int code;
+    fromBuffer<int>(buffer ,0 , code);
+    return new Message<ByteBuffer>(code, &buffer);
+}
+
+void SNZ_Server::setMessageDispatcher(IMessageDispatcher *dispt) {
+    mMessageDispatcher = dispt;
+}
+
