@@ -60,7 +60,7 @@ class ZBrain : public Brain{
          * Ici le brain indique simplement au body de se diriger vers
          * l'épicentre du son.
          */
-        virtual void something_heard(double x, double y);
+        virtual void something_heard(double x, double z, double y);
 
 };
 

@@ -26,7 +26,7 @@ class Player : public Entity
 	public :
 
 		///Constructeur
-		Player(unsigned long, EntityType, EntityState, double, double, double, double);
+        Player(unsigned long long, EntityType, EntityState, double, double, double, double, double, double);
 		
 		///Destructeur
 		~Player();

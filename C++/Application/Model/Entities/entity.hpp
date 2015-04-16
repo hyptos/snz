@@ -37,7 +37,7 @@ class Entity : public QObject
     public :
 
         ///Constructeur
-        Entity(unsigned long, EntityType, EntityState, double, double, double, double);
+        Entity(unsigned long long, EntityType, EntityState, double, double, double, double, double, double);
 
         ///Destructeur
         /*!
@@ -48,7 +48,7 @@ class Entity : public QObject
         virtual ~Entity() = 0;
 
         ///Retourne id de l'entité
-        unsigned long getId() const;
+        unsigned long long getId() const;
 
         ///Retourne le type de l'entité
         EntityType getType() const;
@@ -59,19 +59,25 @@ class Entity : public QObject
         ///Retourne la coordonnée X de l'entité dans l'environnement
         double getX() const;
 
+        ///Retourne la coordonnée Z de l'entité dans l'environnement
+        double getZ() const;
+
         ///Retourne la coordonnée Y de l'entité dans l'environnement
         double getY() const;
 
         ///Retourne la coordonnée X du vecteur direction de l'entité
         double getDX() const;
 
-        ///Retourne la coordonnée X du vecteur direction de l'entité
+        ///Retourne la coordonnée Z du vecteur direction de l'entité
+        double getDZ() const;
+
+        ///Retourne la coordonnée Z du vecteur direction de l'entité
         double getDY() const;
 
     public slots :
 
         ///Modifie la valeur de l'id de l'entité
-        void setId(unsigned long);
+        void setId(unsigned long long);
 
         ///Modife l'état de l'entité
         void setState(EntityState);
@@ -79,31 +85,37 @@ class Entity : public QObject
         ///Modifie la coordonnée X de l'entité
         void setX(double);
 
+        ///Modifie la coordonnée Z de l'entité
+        void setZ(double);
+
         ///Modifie la coordonnée Y de l'entité
         void setY(double);
 
         ///Modife la coordonnée X du vecteur direction de l'entité
         void setDX(double);
 
-        ///Modife la coordonnée X du vecteur direction de l'entité
+        ///Modife la coordonnée Z du vecteur direction de l'entité
+        void setDZ(double);
+
+        ///Modife la coordonnée Y du vecteur direction de l'entité
         void setDY(double);
 
-        ///Modifie les coordonnées X et Y de l'entité
-        void setCoordinate(double, double);
+        ///Modifie les coordonnées X, Z et Y de l'entité
+        void setCoordinate(double, double, double);
 
         ///Modifie le vecteur direction de l'entité
-        void setDirection(double, double);
+        void setDirection(double, double, double);
 
         //Génére et émet les infos concernant l'entité
         virtual void emitInfo();
 
     signals :
 
-        ///Emet les coordonnées X et Y de l'entité dans l'environnement
-        void coordinates(double, double);
+        ///Emet les coordonnées X, Z et Y de l'entité dans l'environnement
+        void coordinates(double, double, double);
 
-        ///Emet les coordonnées X et Y du vecteur direction de l'entité
-        void direction(double, double);
+        ///Emet les coordonnées X, Z et Y du vecteur direction de l'entité
+        void direction(double, double, double);
 
         //Emet l'état de l'entité
         void actualState(EntityState);
@@ -113,14 +125,16 @@ class Entity : public QObject
 
     protected :
 
-        unsigned long m_id;         ///< Id de l'entité
+        unsigned long long m_id;         ///< Id de l'entité
 
         const EntityType m_type;    ///< Type de l'entité (constant)
         EntityState m_state;        ///< Etat de l'entité
 
         double m_x;                 ///< Coordonnée X de l'entité dans l'environnement
+        double m_z;                 ///< Coordonnée Z de l'entité dans l'environnement
         double m_y;                 ///< Coordonnée Y de l'entité dans l'environnement
         double m_dx;                ///< Coordonnée X du vecteur direction de l'entité
+        double m_dz;                ///< Coordonnée Z du vecteur direction de l'entité
         double m_dy;                ///< Coordonnée Y du vecteur direction de l'entité
 };
 

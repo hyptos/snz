@@ -23,7 +23,7 @@ class InfoAction
 	public :
 		
 		///Constructeur
-		InfoAction(const EntityAction&, const unsigned long&, const unsigned long&);
+        InfoAction(const EntityAction&, const unsigned long long&, const unsigned long long&);
 		
 		///Destructeur
 		virtual ~InfoAction();
@@ -32,17 +32,17 @@ class InfoAction
 		EntityAction getAction();
 
 		///Retourne l'id de l'entité faisant l'action
-		unsigned long getEntity();
+        unsigned long long getEntity();
 
 		///Retourne l'id de l'entité cible (si l'action en a une)
-		unsigned long getCible();
+        unsigned long long getCible();
 
 	private :
 
 		const EntityAction m_action;	///< Action faite par une entité
 
-		const unsigned long m_entity;	///< Entité faisant l'action
-		const unsigned long m_cible;	///< Entité ciblé par l'action
+        const unsigned long long m_entity;	///< Entité faisant l'action
+        const unsigned long long m_cible;	///< Entité ciblé par l'action
 };
 
 #endif // INFO_ACTION_HPP

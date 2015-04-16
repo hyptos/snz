@@ -21,13 +21,13 @@ class InfoEntity{
     public :
 
         ///Constructeur
-        InfoEntity(const unsigned long&, const EntityType&, const EntityState&, const double&, const double&, const double&, const double&);
+        InfoEntity(const unsigned long long&, const EntityType&, const EntityState&, const double&, const double&, const double&, const double&, const double&, const double&);
 
         ///Destructeur
         virtual ~InfoEntity();
 
         ///Retourne l'id de l'entité
-        unsigned long getEntity();
+        unsigned long long getEntity();
 
         ///Retourne le type de l'entité
         EntityType getType();
@@ -38,26 +38,35 @@ class InfoEntity{
         ///Retourne la coordonnée X de l'entité dans l'environnement
         double getX();
 
+        ///Retourne la coordonnée Z de l'entité dans l'environnement
+        double getZ();
+
         ///Retourne la coordonnée Y de l'entité dans l'environnement
         double getY();
 
         ///Retourne la coordonnée X du vecteur direction de l'entité
         double getDX();
 
+        ///Retourne la coordonnée Z du vecteur direction de l'entité
+        double getDZ();
+
         ///Retourne la coordonnée Y du vecteur direction de l'entité
         double getDY();
 
     protected :
 
-        const unsigned long m_entity;    ///< Id de l'entité
+        const unsigned long long m_entity;  ///< Id de l'entité
 
-        const EntityType m_type;        ///< Type de l'entité
-        const EntityState m_state;      ///< Etat de l'entité
+        const EntityType m_type;            ///< Type de l'entité
+        const EntityState m_state;          ///< Etat de l'entité
 
-        const double m_x;               ///< Coordonnée X de l'entité dans l'environnement
-        const double m_y;               ///< Coordonnée Y de l'entité dans l'environnement
-        const double m_dx;              ///< Coordonnée X du vecteur direction de l'entité
-        const double m_dy;              ///< Coordonnée Y du vecteur direction de l'entité
+        const double m_x;                   ///< Coordonnée X de l'entité dans l'environnement
+        const double m_z;                   ///< Coordonnée Z de l'entité dans l'environnement
+        const double m_y;                   ///< Coordonnée Y de l'entité dans l'environnement
+
+        const double m_dx;                  ///< Coordonnée X du vecteur direction de l'entité
+        const double m_dz;                  ///< Coordonnée Z du vecteur direction de l'entité
+        const double m_dy;                  ///< Coordonnée Y du vecteur direction de l'entité
 
 };
 

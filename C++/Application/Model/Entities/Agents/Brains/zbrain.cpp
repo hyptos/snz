@@ -12,9 +12,9 @@ ZBrain::~ZBrain(){
 }
 
 //Slot Something Heard
-void ZBrain::something_heard(double x, double y){
+void ZBrain::something_heard(double x, double z, double y){
 
-    emit lets_go_to(x, y);
+    emit lets_go_to(x, z);
 }
 
 //Actions faite par l'agent

@@ -29,7 +29,7 @@ class Body : public QObject{
     public :
 
         ///Constructeur
-        Body(double, double, double, double);
+        Body(double, double, double, double, double, double);
 
         ///Destructeur
         virtual ~Body();
@@ -37,7 +37,7 @@ class Body : public QObject{
     public slots :
 
         ///Fonction senseur appellée lors de l'émition d'un son quelque part dans l'environnement
-        virtual void hear(double, double, double);
+        virtual void hear(double, double, double, double);
 
         ///Fonction moteur appellée par le brain pour indiquer une direction au body
         virtual void move_to(double, double);
@@ -51,13 +51,13 @@ class Body : public QObject{
     signals :
 
         ///Emet les coordonnées d'un son entendu au Brain
-        void hear_something(double, double);
+        void hear_something(double, double, double);
 
         ///Emet les coordonnées du Body
-        void coordinates(double, double);
+        void coordinates(double, double, double);
 
         //Emet la direction du Body
-        void direction(double, double);
+        void direction(double, double, double);
 
         //Emet la vitesse du Body
         void speed(double);
@@ -65,8 +65,10 @@ class Body : public QObject{
     protected :
 
         double m_x;         ///< Coordonnées X du Body de l'Agent
+        double m_z;         ///< Coordonnées Z du Body de l'Agent
         double m_y;         ///< Coordonnées Y du Body de l'Agent
         double m_dx;        ///< Coordonnées DX du Body de l'Agent
+        double m_dz;        ///< Coordonnées DZ du Body de l'Agent
         double m_dy;        ///< Coordonnées DY du Body de l'Agent
         double m_speed;     ///< Vitesse de l'agent dans l'environnement
 };

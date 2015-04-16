@@ -1,7 +1,7 @@
 #include "player.hpp"
 
-Player::Player(unsigned long id, EntityType type, EntityState state, double x, double y, double dx, double dy)
-	: Entity(id, type, state, x, y, dx, dy) {
+Player::Player(unsigned long long id, EntityType type, EntityState state, double x, double z, double y, double dx, double dz, double dy)
+    : Entity(id, type, state, x, z, y, dx, dz, dy) {
 }
 
 Player::~Player(){}

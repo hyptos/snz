@@ -1,27 +1,31 @@
 #include "environment.hpp"
 
 //Constructeur
-Environment::Environment(unsigned long length, unsigned long width) 
-	: m_length(length), m_width(width) {
+Environment::Environment(int length, int width, int height = INT_MAX)
+    : m_length(length), m_width(width), m_height(height) {
 }
 
 //Destructeur
 Environment::~Environment(){}
 
 //Retourne la longueur de l'environnement
-unsigned long Environment::getLength() const{
+int Environment::getLength() const{
 	return m_length;
 }
 
 //Retourne la largeur de l'environnement
-unsigned long Environment::getWidth() const{
+int Environment::getWidth() const{
 	return m_width;
 }
 
-//Retourne si un emplacement est valide par rapport à l'environnement
-bool Environment::validePosition(double x, double y) const{
+int Environment::getHeight() const{
+    return m_height;
+}
 
-	if(x < 0 || x > m_length || y < 0 || y > m_width)
+//Retourne si un emplacement est valide par rapport à l'environnement
+bool Environment::validePosition(double x, double z, double y) const{
+
+    if(x < 0 || x > m_length || z < 0 || z > m_width || y < 0 || y > m_height)
 		return false;
 
 	return true;

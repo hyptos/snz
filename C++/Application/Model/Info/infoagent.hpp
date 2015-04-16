@@ -18,7 +18,7 @@ class InfoAgent : public InfoEntity{
     public :
 
         //Constructeur
-        InfoAgent(const unsigned long&, const EntityType&, const EntityState&, const double&, const double&, const double&, const double&, const double&);
+        InfoAgent(const unsigned long long&, const EntityType&, const EntityState&, const double&, const double&, const double&, const double&, const double&, const double&, const double&);
 
         //Destructeur
         virtual ~InfoAgent();

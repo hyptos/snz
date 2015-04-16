@@ -55,7 +55,7 @@ class SNZ_Model : public QObject{
     signals :
 
         ///Signal du son
-        void sound(double x, double y, double power);
+        void sound(double,double,double,double);
 
         ///Signal envoyé pour indiquer un changement pour une entité (position, état...)
         void maj_entity(InfoEntity);
@@ -65,11 +65,11 @@ class SNZ_Model : public QObject{
 
     private :
 
-        std::vector<Entity*> m_entities;  ///< Liste des entités
-        unsigned long m_nbEntities;       ///< Nombres d'entités présent dans le modèle
+        std::vector<Entity*> m_entities;    ///< Liste des entités
+        unsigned long long m_nbEntities;    ///< Nombres d'entités présent dans le modèle
 
-        int m_envX;                     ///< Taille en X de l'environnement
-        int m_envY;                     ///< Taille en Y de l'environnement
+        int m_envX;                         ///< Taille en X de l'environnement
+        int m_envY;                         ///< Taille en Y de l'environnement
 
 };
 

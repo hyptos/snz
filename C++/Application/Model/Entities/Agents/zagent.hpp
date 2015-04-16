@@ -34,7 +34,7 @@ class ZAgent : public Agent{
          * Initialise les différents attributs de l'agent.
          * Connecte le body et le brain entre eux.
          */
-        ZAgent(unsigned long, double, double, double, double);
+        ZAgent(unsigned long long, double, double, double, double, double, double);
 
         ///Destructeur
         ~ZAgent();

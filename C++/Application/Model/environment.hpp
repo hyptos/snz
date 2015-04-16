@@ -9,7 +9,10 @@
 #define ENVIRONMENT_HPP
 
 #include <iostream>
+#include <climits>
+
 #include <QObject>
+
 
 //! Environment Class
 /*!
@@ -19,23 +22,26 @@
  * Le model (et/ou les entités) vont interroger cette classe
  * pour déterminer si un déplacement est valide, ou simplement
  * avoir des informations sur l'état de l'environnement autour
- * d'un point (x, y).
+ * d'un point (x, y, z).
  */
 class Environment
 {
 	public :
 		
 		///Constructeur
-		Environment(unsigned long, unsigned long);
+        Environment(int, int, int);
 		
 		///Destructeur
 		~Environment();
 
-		//Retourne la longueur de l'environnement
-		unsigned long getLength() const;
+        //Retourne la longueur de l'environnement (X)
+        int getLength() const;
 
-		//Retourne la largeur de l'environnement
-		unsigned long getWidth() const;
+        //Retourne la largeur de l'environnement (Z)
+        int getWidth() const;
+
+        //Retourne la hauteur de l'environnement (Y)
+        int getHeight() const;
 
 		///Retourne si une position est valide par rapport à l'environnement
 		/*!
@@ -43,7 +49,7 @@ class Environment
 		 * position passée en paramètre se trouve entre 0 et la taille
 		 * de l'environnement.
 		 */
-		bool validePosition(double, double) const;
+        bool validePosition(double, double, double) const;
 
 		///Retourne des infos sur l'environnement
 		/*!
@@ -57,8 +63,9 @@ class Environment
 
 	private :
 
-		unsigned long m_length;		///< Longueur de l'environnement (taille sur l'axe X)
-		unsigned long m_width;		///< Largeur de l'environnement (taille sur l'axe Y)
+        int m_length;		///< Longueur de l'environnement (taille sur l'axe X)
+        int m_width;		///< Largeur de l'environnement (taille sur l'axe Z)
+        int m_height;       ///< Hauteur de l'environnement (taille sur l'axe Y)
 };
 
 #endif // ENVIRONMENT_HPP

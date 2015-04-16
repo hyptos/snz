@@ -52,7 +52,7 @@ class Brain : public QObject{
          * programmeur définisse le comportement du brain lors de la réception
          * d'un son par le body.
          */
-        virtual void something_heard(double, double) = 0;
+        virtual void something_heard(double, double, double) = 0;
 
         ///Slot Function gérant la boucle d'actions
         /*!

@@ -9,10 +9,10 @@ SNZ_Model::SNZ_Model(int size, int nbZ)
     for(int i = 0 ; i < nbZ ; i++){
 
         //Création de l'agent
-        ZAgent* zagent = new ZAgent(m_nbEntities++, rand() % size, rand() % size, 0.35, -0.58);
+        ZAgent* zagent = new ZAgent(m_nbEntities++, rand() % size, rand() % size, 0.0, (double) rand() / RAND_MAX, (double) rand() / RAND_MAX, 0.0);
 
         //Connexion son->body
-        QObject::connect(this, SIGNAL(sound(double,double,double)), zagent->getBody(), SLOT(hear(double,double,double)));
+        QObject::connect(this, SIGNAL(sound(double,double,double,double)), zagent->getBody(), SLOT(hear(double,double,double,double)));
 
         //Connexion agent->model
         QObject::connect(zagent, SIGNAL(info(InfoEntity)), this, SLOT(entity_maj(InfoEntity)));
