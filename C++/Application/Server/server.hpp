@@ -36,8 +36,7 @@ private :
 
     void acceptClient(QUuid client);
 
-
-    friend void serveur_listening_routine(SNZ_Server *server);
+    friend void *serveur_listening_routine(void *data);
 
 protected :
 
@@ -57,7 +56,7 @@ typedef struct  _clientData {
 } ClientData;
 
 
-void serveur_listening_routine(SNZ_Server *server);
+void *serveur_listening_routine(void *data);
 void *client_thread_send (void *data);
 void *client_thread_receive (void *data);
 
