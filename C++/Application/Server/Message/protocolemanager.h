@@ -19,10 +19,11 @@ class IMessageDispatcher {
         IMessageDispatcher();
         ~IMessageDispatcher();
         virtual void dispatchMessage(IMessage *msg) = 0;
-        virtual void registerMessageHandler(int id, IMessageHandler *Me) = 0;
+        virtual void registerMessageHandler(char id, IMessageHandler *Me) = 0;
 };
 
 class IMessageHandler {
+public:
     virtual void onOutPutMessage(IMessage *msg) = 0;
 };
 
