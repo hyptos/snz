@@ -44,6 +44,6 @@ void Agent::setSpeed(double speed){
 
 //Génére et emet les info de l'agent
 void Agent::emitInfo(){
-    InfoAgent m_info(m_type, m_state, m_x, m_y, m_dx, m_dy, m_speed);
-    emit info(m_id, m_info);
+    InfoAgent m_info(m_id, m_type, m_state, m_x, m_y, m_dx, m_dy, m_speed);
+    emit info(m_info);
 }

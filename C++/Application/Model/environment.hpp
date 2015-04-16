@@ -1,5 +1,5 @@
 /**
- * File: model.hpp
+ * File: environment.hpp
  * Author: Antoine
  *
  * Created on April 16, 2015, 8:06 AM

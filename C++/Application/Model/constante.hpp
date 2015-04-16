@@ -24,5 +24,11 @@ enum EntityState {
     SNAKE
 };
 
+enum EntityAction {
+    ATTACK,
+    CUT,
+    THROW
+};
+
 #endif // CONSTANTE_HPP
 

@@ -15,15 +15,11 @@ SNZ_Model::SNZ_Model(int size, int nbZ)
         QObject::connect(this, SIGNAL(sound(double,double,double)), zagent->getBody(), SLOT(hear(double,double,double)));
 
         //Connexion agent->model
-        QObject::connect(zagent, SIGNAL(info(ulong,InfoEntity)), this, SLOT(entity_maj(ulong,InfoEntity)));
+        QObject::connect(zagent, SIGNAL(info(InfoEntity)), this, SLOT(entity_maj(InfoEntity)));
 
         //On ajoute l'agent dans la liste
         m_entities.push_back(zagent);
     }
-
-    QTimer* timer = new QTimer();
-    timer->connect(timer, SIGNAL(timeout()), this, SLOT(actions()));
-    timer->start(100);
 }
 
 //Destructeur
@@ -31,13 +27,13 @@ SNZ_Model::~SNZ_Model(){
 }
 
 //Actions sur les agents
-void SNZ_Model::actions(){
-     emit sound(rand() % m_envX, rand() % m_envY, 50);
+void SNZ_Model::entity_action(InfoAction info){
+    emit maj_action(info);
 }
 
 //Transmet les info des entités à la vue
-void SNZ_Model::entity_maj(unsigned long id, InfoEntity info){
-    emit maj_view(id, info);
+void SNZ_Model::entity_maj(InfoEntity info){
+    emit maj_entity(info);
 }
 
 

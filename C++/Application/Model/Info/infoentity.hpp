@@ -21,10 +21,13 @@ class InfoEntity{
     public :
 
         ///Constructeur
-        InfoEntity(const EntityType&, const EntityState&, const double&, const double&, const double&, const double&);
+        InfoEntity(const unsigned long&, const EntityType&, const EntityState&, const double&, const double&, const double&, const double&);
 
         ///Destructeur
-        ~InfoEntity();
+        virtual ~InfoEntity();
+
+        ///Retourne l'id de l'entité
+        unsigned long getEntity();
 
         ///Retourne le type de l'entité
         EntityType getType();
@@ -46,13 +49,15 @@ class InfoEntity{
 
     protected :
 
-        const EntityType m_type;    ///< Type de l'entité
-        const EntityState m_state;  ///< Etat de l'entité
+        const unsigned long m_entity;    ///< Id de l'entité
 
-        const double m_x;           ///< Coordonnée X de l'entité dans l'environnement
-        const double m_y;           ///< Coordonnée Y de l'entité dans l'environnement
-        const double m_dx;          ///< Coordonnée X du vecteur direction de l'entité
-        const double m_dy;          ///< Coordonnée Y du vecteur direction de l'entité
+        const EntityType m_type;        ///< Type de l'entité
+        const EntityState m_state;      ///< Etat de l'entité
+
+        const double m_x;               ///< Coordonnée X de l'entité dans l'environnement
+        const double m_y;               ///< Coordonnée Y de l'entité dans l'environnement
+        const double m_dx;              ///< Coordonnée X du vecteur direction de l'entité
+        const double m_dy;              ///< Coordonnée Y du vecteur direction de l'entité
 
 };
 

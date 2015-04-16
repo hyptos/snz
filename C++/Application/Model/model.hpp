@@ -22,6 +22,7 @@
 #include "Entities/Agents/zagent.hpp"
 #include "Info/infoagent.hpp"
 #include "Info/infoentity.hpp"
+ #include "Info/infoaction.hpp"
 
 
 //! SNZ_Model Class
@@ -45,16 +46,22 @@ class SNZ_Model : public QObject{
 
     public slots :
 
-        void actions();
+        ///Function de reception d'une action faite par une entité
+        void entity_action(InfoAction);
 
-        void entity_maj(unsigned long, InfoEntity);
+        ///Function de reception d'une modification d'une entité (position, état...)
+        void entity_maj(InfoEntity);
 
     signals :
 
         ///Signal du son
         void sound(double x, double y, double power);
 
-        void maj_view(unsigned long, InfoEntity);
+        ///Signal envoyé pour indiquer un changement pour une entité (position, état...)
+        void maj_entity(InfoEntity);
+
+        ///Signal envoyé pour indiquer une action faite par une entité
+        void maj_action(InfoAction);
 
     private :
 

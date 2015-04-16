@@ -18,10 +18,10 @@ class InfoAgent : public InfoEntity{
     public :
 
         //Constructeur
-        InfoAgent(const EntityType&, const EntityState&, const double&, const double&, const double&, const double&, const double&);
+        InfoAgent(const unsigned long&, const EntityType&, const EntityState&, const double&, const double&, const double&, const double&, const double&);
 
         //Destructeur
-        ~InfoAgent();
+        virtual ~InfoAgent();
 
         //Retourne la vitesse de l'agent
         double getSpeed();

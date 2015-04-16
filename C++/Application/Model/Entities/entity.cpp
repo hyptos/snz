@@ -105,7 +105,7 @@ void Entity::setDirection(double dx, double dy){
 //Génére et émet les info concernant l'entité
 void Entity::emitInfo(){
 
-    InfoEntity m_info(m_type, m_state, m_x, m_y, m_dx, m_dy);
+    InfoEntity m_info(m_id, m_type, m_state, m_x, m_y, m_dx, m_dy);
 
-    emit info(m_id, m_info);
+    emit info(m_info);
 }

@@ -53,8 +53,6 @@ class Agent : public Entity{
         ///Génére et émet les infos concernant l'agent
         virtual void emitInfo();
 
-
-
     protected :
 
         double m_speed;     ///< Vitesse de l'agent

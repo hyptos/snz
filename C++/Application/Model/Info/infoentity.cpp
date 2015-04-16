@@ -1,12 +1,17 @@
 #include "infoentity.hpp"
 
 //Constructeur
-InfoEntity::InfoEntity(const EntityType &type, const EntityState& state, const double& x, const double& y, const double &dx, const double &dy)
-    : m_type(type), m_state(state), m_x(x), m_y(y), m_dx(dx), m_dy(dy){
+InfoEntity::InfoEntity(const unsigned long& entity, const EntityType &type, const EntityState& state, const double& x, const double& y, const double &dx, const double &dy)
+    : m_entity(entity), m_type(type), m_state(state), m_x(x), m_y(y), m_dx(dx), m_dy(dy){
 }
 
 //Destructeur
 InfoEntity::~InfoEntity(){
+}
+
+//Retourne l'id de l'entité
+unsigned long InfoEntity::getEntity(){
+	return m_entity;
 }
 
 //Retourne le type de l'entité

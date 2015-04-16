@@ -29,7 +29,8 @@
  * peuvent possiblement instancier des
  * signaux et des slots.
  */
-class Entity : public QObject{
+class Entity : public QObject
+{
 
     Q_OBJECT
 
@@ -108,7 +109,7 @@ class Entity : public QObject{
         void actualState(EntityState);
 
         //Emet l'id de l'entité ainsi que les info le concernant
-        void info(unsigned long, InfoEntity);
+        void info(InfoEntity);
 
     protected :
 
